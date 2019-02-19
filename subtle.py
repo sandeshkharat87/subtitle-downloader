@@ -20,10 +20,10 @@ if moviename == '':
 # moviename = 'spider man'
 
 #               URLS
-baseurl = "https://opensubtitles.co"
+mainURL = "https://opensubtitles.co"
 searchurl = "https://opensubtitles.co/search?q=" + moviename.replace(" ", "+")
 
-print("\n\nSearching movies....  \n\n")  # + searchurl + "\n")
+print("\n\nSearching movies.... \n\n")  # + searchurl + "\n")
 
 # Request to webpage
 
@@ -80,7 +80,7 @@ try:
 
     # print("\n ", half_Link)
 
-    full_Link = baseurl + half_Link
+    full_Link = mainURL + half_Link
 
     # print(full_Link)
 
@@ -88,7 +88,7 @@ try:
 
     with open(f"{MV_name}.srt", 'wb') as file:
         file.write(generateDown.content)
-        print("\n" + MV_name + " succesfully downloaded in > " + os.getcwd() + " \n")
+        print("\n" + MV_name + " succesfully downloaded in > " + os.getcwd() + "  \n")
 
 except ValueError:
     print("\nInvalid choice\n")
