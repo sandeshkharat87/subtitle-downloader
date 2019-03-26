@@ -1,15 +1,15 @@
 # subtitle-downloader
 
 
-For Desktop user USE ->
+1)For Desktop user USE ->
 
-1)Python3.6 or above
+            1)Python3.6 or above
 
-2)BeautifulSoup    (pip install bs4)
+            2)BeautifulSoup    (pip install bs4)
 
-3)html5lib -parser  (pip install html5lib)
+            3)html5lib -parser  (pip install html5lib)
 
-4) requests          (pip install requests  )
+            4) requests          (pip install requests  )
 
 
 
@@ -45,7 +45,8 @@ For Desktop user USE ->
             
             
 
-For Android user >>>>>>
+
+2) For Android user >>>>>>
 
 We can run this code on Android smartphone also
 To Download subtitles on your smartphone you have to  install Termux application
