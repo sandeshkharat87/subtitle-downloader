@@ -33,9 +33,9 @@ USE ->
 
             
 > Now Download python mentioned packges using pip ( pip install "packagename"  )
-          pip install bs4
-          pip install html5lib
-          pip install requests
+          1.pip install bs4
+          2.pip install html5lib
+          3.pip install requests
 
 > Then jsut run the code
         >>>> python3.6 "fileName.py"
