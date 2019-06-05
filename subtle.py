@@ -42,7 +42,7 @@ name_Count = 0
 
 for moviename in scratch_link[:-5]:
     name_Count += 1
-    print(f"{str(name_Count)})  {moviename['href'].split('/')[-1]}")
+    print(f"[{str(name_Count)}]  {moviename['href'].split('/')[-1]}")
     subtle_link[name_Count] = moviename['href']  # adding values to "subtle_link" Dictionary
 
 
