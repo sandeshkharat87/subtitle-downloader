@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import sys
-
+import zipfile
 
 subtle_link = {}   # Dict. for holding movie names
 
@@ -12,83 +12,95 @@ print("\n")
 
 #              Take movie name
 
-moviename = input("\nEnter movie name : ")
+moviename = input("\n   Enter movie name : ").strip()
 
-if moviename == '':
-    print("You didnot enter anything!!!!\n")
-    sys.exit()
-# moviename = 'spider man'
+# moviename = "iron man"
+
 
 #               URLS
-mainURL = "https://opensubtitles.co"
-searchurl = "https://opensubtitles.co/search?q=" + moviename.replace(" ", "+")
+baseurl = "https://www.yifysubtitles.com"
+searchurl = "https://www.yifysubtitles.com/search?q=" + moviename.replace(" ", "+")
 
-print("\n\nSearching movies.... \n\n")  # + searchurl + "\n")
 
 # Request to webpage
-
-r = requests.get(searchurl).text
-
-soup = BeautifulSoup(r, 'html5lib')
-
-
-#               finding links and names
-
-
-scratch_link = soup.find_all("a", class_="list-group-item")
-
-
-name_Count = 0
-
-for moviename in scratch_link[:-5]:
-    name_Count += 1
-    print(f"[{str(name_Count)}]  {moviename['href'].split('/')[-1]}")
-    subtle_link[name_Count] = moviename['href']  # adding values to "subtle_link" Dictionary
-
-
-if len(subtle_link) == 0:
-    print(" Zero search Resultss :( !!!\n")
-    sys.exit()
-print()
-
-
 try:
-    Uesrs_Choice = int(input("Enter your choice : "))
-    if Uesrs_Choice > len(subtle_link):
-        print(" \n INVALID CHOICE \n")
-        sys.exit()
+    r = requests.get(searchurl).text
 
-    MV_name = subtle_link[Uesrs_Choice].split('/')[-1]  # actual movie name
+    soup = BeautifulSoup(r, 'html5lib')
 
-# except ValueError:
-#     print("\nInvalid choice\n")
-#     sys.exit
+    scratch_link = soup.find_all("div", class_="media-body")
 
-    r2 = requests.get(subtle_link[Uesrs_Choice]).text
+    # print(scratch_link[0].a['href'])
 
-    sub2 = BeautifulSoup(r2, 'html5lib')
+    name_Count = 0
+    for mname in scratch_link:
+        name_Count += 1
+        Imdb_score = mname.a.find_all("div", class_="col-sm-6 col-xs-12 movie-genre")[1].find_all("span", class_="movinfo-section")[2].text.replace("I", " I")
+        uU = mname.a['href']
+        MV_name = mname.h3.text
+        subtle_link[name_Count] = [baseurl + uU, MV_name, Imdb_score]
 
-    links = sub2.find('ul', class_="list-group").a['href']
+    print()
+    print()
 
-    # print(links)
+    for num, v in subtle_link.items():
+        print(f"    [ {num} ]  {v[2]} -- {v[1]}    ")
 
-    r3 = requests.get(links).text
+    print()
+    print()
 
-    sub3 = BeautifulSoup(r3, 'html5lib')
+    # Uesrs_Choice = 1
+    try:
 
-    half_Link = sub3.find('a', class_="btn btn-danger")['href']
+        if len(subtle_link) == 0:
+            print(" \n      Zero Results\n ")
+            sys.exit()
 
-    # print("\n ", half_Link)
+        Uesrs_Choice = int(input("  Enter ur Choice: "))
 
-    full_Link = mainURL + half_Link
+        if Uesrs_Choice > len(subtle_link):
+            print("\n   Invalid Choice  ")
+            sys.exit()
 
-    # print(full_Link)
+        # print(subtle_link[Uesrs_Choice][0])
+        y_page = requests.get(subtle_link[Uesrs_Choice][0]).text
+        print()
+        print()
+        sub2 = BeautifulSoup(y_page, 'html5lib')
 
-    generateDown = requests.get(full_Link)
+        links = sub2.find_all("tr", class_="high-rating")
 
-    with open(f"{MV_name}.srt", 'wb') as file:
-        file.write(generateDown.content)
-        print("\n" + MV_name + " succesfully downloaded in > " + os.getcwd() + "  \n")
+        for x in links:
+            if x.find("td", class_="flag-cell").text == "English":
+                # print(x.a)
+                u_half = x.a["href"]
+                f_url = baseurl + u_half
 
-except ValueError:
-    print("\nInvalid choice\n")
+        # print(f_url)
+
+        z_page = requests.get(f_url).text
+
+        sub3 = BeautifulSoup(z_page, 'html5lib')
+
+        half_Link = sub3.find("a", class_="btn-icon download-subtitle")["href"]
+
+        # print(half_Link)
+
+        generateDown = requests.get(half_Link)
+
+        # MV_name = half_Link.split('/')[-1][:-4]
+        MV_name = subtle_link[Uesrs_Choice][1]
+
+        with open(f"{MV_name}.zip", 'wb') as file:
+            file.write(generateDown.content)
+            print("\n" + MV_name + " succesfully downloaded in > " + os.getcwd() + " :) \n")
+
+        with zipfile.ZipFile(f"{MV_name}.zip", "r") as zip_ref:
+            zip_ref.extractall()
+
+    except Exception as e:
+        print("\n   Invalid Choice\n\n")
+
+
+except Exception as e:
+    print("No Internet Connection\n")
