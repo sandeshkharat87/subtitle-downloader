@@ -14,7 +14,7 @@ print("\n")
 
 moviename = input("\n   Enter movie name : ").strip()
 
-# moviename = "iron man"
+# moviename = "ironman"
 
 
 #               URLS
@@ -49,7 +49,7 @@ try:
     print()
     print()
 
-    # Uesrs_Choice = 1
+    tempdata = []
     try:
 
         if len(subtle_link) == 0:
@@ -57,6 +57,7 @@ try:
             sys.exit()
 
         Uesrs_Choice = int(input("  Enter ur Choice: "))
+        # Uesrs_Choice = int(1)
 
         if Uesrs_Choice > len(subtle_link):
             print("\n   Invalid Choice  ")
@@ -68,15 +69,18 @@ try:
         print()
         sub2 = BeautifulSoup(y_page, 'html5lib')
 
-        links = sub2.find_all("tr", class_="high-rating")
+        links = sub2.find_all("tr")
 
-        for x in links:
-            if x.find("td", class_="flag-cell").text == "English":
-                # print(x.a)
-                u_half = x.a["href"]
-                f_url = baseurl + u_half
+        # print(links)
 
-        # print(f_url)
+        for k in links:
+            # print(k.find_all("td", "flag-cell"))
+            for j in k.find_all("td", "flag-cell"):
+                if j.text == "English":
+                    tempdata.append(k)
+
+        u_half = tempdata[0].a["href"]
+        f_url = baseurl + u_half
 
         z_page = requests.get(f_url).text
 
@@ -88,7 +92,6 @@ try:
 
         generateDown = requests.get(half_Link)
 
-        # MV_name = half_Link.split('/')[-1][:-4]
         MV_name = subtle_link[Uesrs_Choice][1]
 
         with open(f"{MV_name}.zip", 'wb') as file:
@@ -100,7 +103,8 @@ try:
 
     except Exception as e:
         print("\n   Invalid Choice\n\n")
+        # print(e)
 
 
 except Exception as e:
-    print("No Internet Connection\n")
+    print("\nNo Internet Connection\n")
