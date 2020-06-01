@@ -9,7 +9,7 @@ subtle_link = {}   # Dict. for holding movie names and links
 
 
 def downsub(moviename=input("\n\t\tEnter movie name:  "), lang=None):
-    # def downsub(moviename, lang=None):
+    
     try:
         moviename.strip()
         mainURL = "https://opensubtitles.co"
