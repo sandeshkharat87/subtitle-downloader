@@ -9,6 +9,7 @@ subtle_link = {}   # Dict. for holding movie names
 
 
 print("\n")
+#
 
 #              Take movie name
 
@@ -19,7 +20,8 @@ moviename = input("\n   Enter movie name : ").strip()
 
 #               URLS
 baseurl = "https://www.yifysubtitles.com"
-searchurl = "https://www.yifysubtitles.com/search?q=" + moviename.replace(" ", "+")
+searchurl = "https://www.yifysubtitles.com/search?q=" + \
+    moviename.replace(" ", "+")
 
 
 # Request to webpage
@@ -35,7 +37,8 @@ try:
     name_Count = 0
     for mname in scratch_link:
         name_Count += 1
-        Imdb_score = mname.a.find_all("div", class_="col-sm-6 col-xs-12 movie-genre")[1].find_all("span", class_="movinfo-section")[2].text.replace("I", " I")
+        Imdb_score = mname.a.find_all("div", class_="col-sm-6 col-xs-12 movie-genre")[
+            1].find_all("span", class_="movinfo-section")[2].text.replace("I", " I")
         uU = mname.a['href']
         MV_name = mname.h3.text
         subtle_link[name_Count] = [baseurl + uU, MV_name, Imdb_score]
@@ -96,7 +99,8 @@ try:
 
         with open(f"{MV_name}.zip", 'wb') as file:
             file.write(generateDown.content)
-            print("\n" + MV_name + " succesfully downloaded in > " + os.getcwd() + " :) \n")
+            print("\n" + MV_name + " succesfully downloaded in > " +
+                  os.getcwd() + " :) \n")
 
         with zipfile.ZipFile(f"{MV_name}.zip", "r") as zip_ref:
             zip_ref.extractall()
