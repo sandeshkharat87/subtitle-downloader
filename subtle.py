@@ -39,7 +39,7 @@ def downsub(moviename=input("\n\t\tEnter movie name:  "), lang=None):
             try:
                 Uesrs_Choice = int(input("\nEnter your choice : "))
                 # Uesrs_Choice = int(1)
-                if Uesrs_Choice < len(subtle_link):
+                if Uesrs_Choice <= len(subtle_link):
                     MV_name = subtle_link[Uesrs_Choice].split('/')[-1]
                     r2 = requests.get(subtle_link[Uesrs_Choice]).text
                     sub2 = BeautifulSoup(r2, 'html5lib')
