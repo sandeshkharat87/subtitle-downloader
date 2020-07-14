@@ -3,15 +3,16 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import sys
+import time
+
+import threading
+subtle_link = {}   # Dict. for holding movie names
 
 
-subtle_link = {}   # Dict. for holding movie names and links
-
-
-def downsub(moviename=input("\n\t\tEnter movie name:  "), lang=None):
-    
+def downsub(moviename=input("\nEnter Movie name : "), lang=None):
+    # def downsub(moviename, lang=None):
     try:
-        moviename.strip()
+
         mainURL = "https://opensubtitles.co"
         searchurl = "https://opensubtitles.co/search?q=" + \
             moviename.replace(" ", "+")
@@ -38,29 +39,45 @@ def downsub(moviename=input("\n\t\tEnter movie name:  "), lang=None):
         if len(subtle_link) != 0:
             try:
                 Uesrs_Choice = int(input("\nEnter your choice : "))
-                # Uesrs_Choice = int(1)
                 if Uesrs_Choice <= len(subtle_link):
-                    MV_name = subtle_link[Uesrs_Choice].split('/')[-1]
+                    MV_Folder_name = subtle_link[Uesrs_Choice].split('/')[-1]
+                    os.makedirs(MV_Folder_name, exist_ok=True)
                     r2 = requests.get(subtle_link[Uesrs_Choice]).text
                     sub2 = BeautifulSoup(r2, 'html5lib')
-                    links = sub2.find('ul', class_="list-group").a['href']
-                    r3 = requests.get(links).text
-                    sub3 = BeautifulSoup(r3, 'html5lib')
-                    half_Link = sub3.find('a', class_="btn btn-danger")['href']
-                    full_Link = mainURL + half_Link
-                    # Downloading Content
-                    generateDown = requests.get(full_Link)
-                    with open(f"{MV_name}.srt", 'wb') as file:
-                        file.write(generateDown.content)
-                        print("\n" + MV_name +
-                              " Downloaded in > " + os.getcwd() + "  \n")
+                    # links = sub2.find('ul', class_="list-group").a['href']
+                    links = sub2.find_all(
+                        'ul', class_="list-group")[0].find_all(class_="list-group-item")
+                    i = 0
 
+                    print("\nDownloading all subtiles....Please wait... \n")
+
+                    for eachlink in links:
+                        new_link = eachlink['href']
+                        new_name = eachlink.div.strong.text
+
+                        r3 = requests.get(new_link).text
+
+                        sub3 = BeautifulSoup(r3, 'html5lib')
+                        half_Link = sub3.find(
+                            'a', class_="btn btn-danger")['href']
+
+                        full_Link = mainURL + half_Link
+                        # Downloading Content
+                        generateDown = requests.get(full_Link)
+                        with open(f"{MV_Folder_name }/{new_name}.srt", 'wb') as file:
+                            file.write(generateDown.content)
+
+                    print("\n" + MV_Folder_name +
+                          " Downloaded in > " + os.getcwd() + "  \n")
                 else:
                     print(f"\n\t\tInvalid Choice....Try Agian....\n")
 
+            except KeyboardInterrupt as e:
+                print(e)
             except Exception as e:
-                # print(e)
-                pass
+                print(e)
+                # pass
+
         else:
             print("\n\t\t Zero search results!!! \n")
 
