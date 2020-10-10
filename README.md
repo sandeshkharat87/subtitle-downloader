@@ -1,6 +1,6 @@
 # subtitle-downloader
 
-<img src="images/sub_git.png" width="400"  >
+<img src="images/sub_git.png" width="700"  >
 
 ## Subtitle Downloader- downloads the subtitle of movie. Without opening browser.You just need to provide movie name. ##
 
