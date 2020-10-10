@@ -4,18 +4,12 @@
 
 ## Requrement Python3.6 or above ##
 
-
-1. BeautifulSoup (pip install bs4)
-
-1. html5lib -parser (pip install html5lib)
-
-1. requests  (pip install requests)
-
+##### pip install -r requirements.txt #####
 
 
 #### FOR DOWNLOADING ALL SUBTITLES OF MOVIE ADD " :a " AFTER MOVIE NAME TO DOWLOAD ALL SUBTITLES OF MOVIE ####
 
-    **eg. Enter moviename ??? Avengers :a**
+    eg. Enter moviename ??? Avengers :a
 
 
 #### FOR DOWNLOADING ONLY SINGLE SUBTITLE OF MOVIE(HIGEST RATED) DONT ADD ANYTHING AFTER MOVIE NAME , SO PROGRAM WILL DOWNLOAD THE SINGLE SUBTITLE OF MOVIE ####
